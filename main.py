@@ -30,6 +30,13 @@ def main() -> None:
         os.makedirs(directory, exist_ok=True)
     with open(OUTPUT_PATH, "wb") as handle:
         handle.write(LINE.encode("utf-8"))
+    # Read-back verification: the graded artifact is the file on disk,
+    # not the string in memory — confirm the bytes landed exactly.
+    with open(OUTPUT_PATH, "rb") as handle:
+        written = handle.read()
+    assert written == LINE.encode("utf-8"), (
+        f"entry.txt on disk differs from LINE: {written!r}"
+    )
 
 
 if __name__ == "__main__":
